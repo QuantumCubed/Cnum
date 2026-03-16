@@ -26,7 +26,7 @@ namespace numc {
 			shape.cols = size;
 		}
 
-		T get(std::size_t index) {
+		T get(std::size_t index) const {
 			if (index >= size) throw std::out_of_range("index of of range!");
 			return elements[index];
 		}
@@ -37,11 +37,9 @@ namespace numc {
 		}
 
 		friend std::ostream& operator<<(std::ostream& os, const Vector<T>& vec) {
-			if (vec.size == 0) { os << "[ ]"; return os; }
-
 			os << "[ ";
 
-			for (std::size_t i = 0; i < vec.size - 1; ++i) {
+			for (std::size_t i = 0; i < vec.capacity; ++i) {
 				os << vec.elements[i] << ", ";
 			}
 

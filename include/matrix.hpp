@@ -11,6 +11,7 @@ namespace numc {
 
 	struct Matrix {
 		std::unique_ptr<T[]> elements;
+		std::size_t capacity;
 		std::size_t size;
 		numc::Shape shape;
 
@@ -19,7 +20,8 @@ namespace numc {
 				static_cast<uint32_t>(rows), 
 				static_cast<uint32_t>(cols),
 			}),
-			size(rows * cols),
+			size(0),
+			capacity(rows * cols),
 			elements(std::make_unique<T[]>(rows * cols)) {}
 		
 		~Matrix() = default;
@@ -28,8 +30,20 @@ namespace numc {
 			if (row_index >= shape.rows || col_index >= shape.cols) { throw std::out_of_range("index of of range!"); } 
 			return elements[row_index * shape.cols + col_index];
 		}
+
+		void push(T value) {
+			if (size >= capacity) return;
+			elements[size++] = value;
+		}
+
+		void set(std::size_t index_row, std::size_t index_col, T value) {
+			if (index_row >= shape.rows || index_col >= shape.cols) return;
+			elements[index_row * shape.cols + index_col] = value;
+		}
 		
 		friend std::ostream& operator<<(std::ostream& os, const Matrix<T>& mat) {
+			if (mat.size == 0) { os << "[[ ]]"; return os; }
+
 			os << "[";
 
 			for (uint32_t i = 0; i < mat.shape.rows; ++i) {

@@ -4,6 +4,7 @@
 #include <cstddef>
 #include <memory>
 #include <ostream>
+#include <cmath>
 
 namespace numc {
 
@@ -81,6 +82,20 @@ namespace numc {
 
 		return vec3;
 	}
+	
+	template <typename T>
+	Vector<T> vecSub(const Vector<T>& a, const Vector<T>& b) {
+		Vector<T> c(a.size);
+
+		for (size_t i = 0; i < a.size; ++i) {
+			c.elements[i] = a.elements[i] - b.elements[i];
+		}
+
+		c.size = a.size;
+		c.shape.cols = a.shape.cols;
+
+		return c;
+	}
 
 	template <typename T>
 	T dot(const Vector<T>& vec1, const Vector<T>& vec2) {
@@ -93,4 +108,35 @@ namespace numc {
 		}
 		return dot;
 	}
+	
+	template <typename T>
+	double magnitude(const Vector<T>& vec) {
+		uint32_t sum = 0;
+
+		for (size_t i = 0; i < vec.size; ++i) {
+			sum += (vec.elements[i] * vec.elements[i]);
+		}
+
+		return std::sqrt(sum);
+	}
+
+	template <typename T>
+	double cosine_similarity(const Vector<T>& a, const Vector<T>& b) {
+		double sumAB = 0;
+		double sumAA = 0;
+		double sumBB = 0;
+
+		for (size_t i = 0; i < a.size; ++i) {
+			sumAB += a.elements[i] * b.elements[i];
+			sumAA += a.elements[i] * a.elements[i];
+			sumBB += b.elements[i] * b.elements[i];
+		}
+
+		return (sumAB / (std::sqrt(sumAA) * std::sqrt(sumBB)));
+	}
+
+	// template <typename T>
+	// Vector<T> cross(const Vector<T>& vecA, const Vector<T>& vecB) {
+	//
+	// }
 }

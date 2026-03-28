@@ -5,26 +5,36 @@
 
 int main(void) {
 		
-	auto vec1 = numc::Vector<int>(3);
-	auto vec2 = numc::Vector<int>(3);
+	// auto vec1 = numc::Vector<int>(3);
+	// auto vec2 = numc::Vector<int>(3);
+	//
+	// for (int i = 0; i < 3; ++i) {
+	// 	vec1.push(i);
+	// 	vec2.push(i + 1);
+	// }
+	//
+	// std::cout << vec1;
+	// std::cout << vec2;	
+	//
+	// double similarity = numc::cosine_similarity(vec1, vec2);
+	//
+	// std::cout << similarity << "\n";
 	
-	for (int i = 0; i < 3; ++i) {
-		vec1.push(i);
-		vec2.push(i + 1);
+	// MATRIX TEST STARTS HERE:
+	
+	auto matrixA = numc::Matrix<int>(3, 3);
+	auto matrixB = numc::Matrix<int>(3, 3);
+
+	for (int i = 0; i < 9; ++i) {
+		matrixA.push(i + 1);
 	}
 	
-	std::cout << vec1;
-	
-	// auto vec3 = numc::vecAdd(vec1, vec2);
-	numc::scalarX(vec1, 3);	
-	// auto mat = numc::Matrix<int>(3, 3);
-	
-	std::cout << vec1;
-	// std::cout << vec2;
-	// std::cout << vec3;
-	// std::cout << vec3.shape.cols;
+	for (int i = 9; i >= 0; --i) {
+		matrixB.push(i);
+	}
 
-	// std::cout << mat;
-	
+	std::cout << matrixA << "\n";
+	std::cout << matrixB << "\n";
+
 	return 0;
 }

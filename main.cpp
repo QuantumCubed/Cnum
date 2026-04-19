@@ -7,15 +7,24 @@ int main(void) {
 		
 	// auto vec1 = numc::Vector<int>(3);
 	// auto vec2 = numc::Vector<int>(3);
-	//
+
 	// for (int i = 0; i < 3; ++i) {
 	// 	vec1[i] = i + 1;
 	// }
 	//
+	// for (int i = 0; i < 3; ++i) {
+	// 	vec2[i] = i + 1;
+	// }
+	//
+	// auto matC = numc::outer_product(vec1, vec2);
+	//
+	// std::cout << matC << "\n";
+
 	// auto vec3 = numc::hadamard(vec1, vec2);
 	//
 	// std::cout << vec1 << "\n";
 	// std::cout << vec2 << "\n";
+	// std::cout << matC << "\n";
 	//
 	//
 	// std::cout << vec3 << "\n";
@@ -60,17 +69,26 @@ int main(void) {
 	std::cout << matrixA << "\n";
 	std::cout << matrixB << "\n";
 	//
-	// numc::Matrix<int> matrixC = numc::matMult(matrixA, matrixB);
-	//
-	// std::cout << matrixC << "\n";
-	//
-	// numc::Matrix<int> matrixD = numc::hadamard(matrixA, matrixB);
-	//
-	// std::cout << matrixD << "\n";
-	
-	// auto matrixT = numc::transpose(matrixA);
+	numc::Matrix<int> matrixC = numc::mat_mult(matrixA, matrixB);
 
-	// std::cout << matrixT << "\n";
+	std::cout << matrixC << "\n";
+
+	numc::Matrix<int> matrixD = numc::hadamard(matrixA, matrixB);
+
+	std::cout << matrixD << "\n";
+	
+	auto matrixT = numc::transpose(matrixA);
+
+	std::cout << matrixT << "\n";
+	
+	auto vecSumCol = numc::sum(matrixT, 0);
+	auto vecSumRow = numc::sum(matrixT, 1);
+
+	std::cout << vecSumCol << "\n";
+	std::cout << vecSumRow << "\n";
+
+	std::cout << numc::mean(matrixT, 0) << "\n";
+	std::cout << numc::mean<int, double>(matrixT, 1) << "\n";
 
 	return 0;
 }

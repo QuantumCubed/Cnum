@@ -51,14 +51,14 @@ namespace numc {
 	};
 
 	template <typename T>
-	void scalarX(Matrix<T>& mat, int x) {
+	void scalar_x(Matrix<T>& mat, int x) {
 		for (size_t i = 0; i < mat.shape.rows * mat.shape.cols; ++i) {
 			mat.elements[i] *= x;
 		}
 	}
 
 	template <typename T>
-	Matrix<T> matAdd(const Matrix<T>& matA, const Matrix<T>& matB) {
+	Matrix<T> mat_add(const Matrix<T>& matA, const Matrix<T>& matB) {
 		// add length & shape check later
 		Matrix<T> matC(matA.shape);
 
@@ -72,7 +72,7 @@ namespace numc {
 	}
 	
 	template <typename T>
-	Matrix<T> matSub(const Matrix<T>& matA, const Matrix<T>& matB) {
+	Matrix<T> mat_sub(const Matrix<T>& matA, const Matrix<T>& matB) {
 		// add length & shape check later
 		Matrix<T> matC(matA.shape);
 
@@ -80,21 +80,19 @@ namespace numc {
 			matC.elements[i] = matA.elements[i] - matB.elements[i];
 		}
 
-		matC.size = matA.size;
 		matC.shape = matA.shape;
 
 		return matC;
 	}
 
 	template <typename T>
-	Matrix<T> matMult(const Matrix<T>& matA, const Matrix<T>& matB) {
+	Matrix<T> mat_mult(const Matrix<T>& matA, const Matrix<T>& matB) {
 		// add shape validity check: (m x n) * (n x p)
 
 		if (matA.shape.cols != matB.shape.rows)
 			throw std::invalid_argument("Incompatible Matrix Dimensions");
 		
 		Matrix<T> matC(matA.shape.rows, matB.shape.cols);
-		matC.size = matC.shape.rows * matC.shape.cols;
 
 		for (size_t k = 0; k < matA.shape.cols; ++k) {
 			for (size_t i = 0; i < matA.shape.rows; ++i) {
@@ -115,9 +113,8 @@ namespace numc {
 		
 		Matrix<T> matC(matA.shape.rows, matB.shape.cols);
 
-		for (size_t i = 0; i < matA.size; ++i) {
+		for (size_t i = 0; i < matA.shape.size; ++i) {
 			matC.elements[i] = matA.elements[i] * matB.elements[i];
-			++matC.size;
 		}
 
 		return matC;
@@ -126,15 +123,24 @@ namespace numc {
 	// ADD TILING FOR BIGGER MATRImatC.ES e.g. 8x8
 	template <typename T>
 	Matrix<T> transpose(const Matrix<T>& mat) {
-		Matrix<T> t(mat.shape.cols, mat.shape.rows);
+		Matrix<T> matT(mat.shape.cols, mat.shape.rows);
 
 		for (size_t i = 0; i < mat.shape.rows; ++i) {
 			for (size_t j = 0; j < mat.shape.cols; j++) {
-				t.elements[j * mat.shape.rows + i] = mat.elements[i * mat.shape.cols + j];
-				++t.size;
+				matT.elements[j * mat.shape.rows + i] = mat.elements[i * mat.shape.cols + j];
 			}
 		}
-		return t;
+		return matT;
 	}
+
+	// template <typename T>
+	// T determinant(Matrix<T>& mat) {
+	// 	T det = 0;
+	//
+	//
+	//
+	//
+	// 	return det;
+	// }
 
 }

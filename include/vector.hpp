@@ -35,21 +35,21 @@ namespace numc {
 				os << vec.elements[i] << ", ";
 			}
 
-			os << vec.elements[vec.shape.size - 1] << " ]";
+			os << vec.elements[vec.shape.size - 1] << " ]" << "\n";
 
 			return os;
 		}
 	};
 
 	template <typename T>
-	void scalarX(Vector<T>& vec, int x) {
+	void scalar_x(Vector<T>& vec, int x) {
 		for (size_t i = 0; i < vec.shape.size; ++i) {
 			vec.elements[i] *= x;
 		}
 	}
 
 	template <typename T>
-	Vector<T> vecAdd(const Vector<T>& vecA, const Vector<T>& vecB) {
+	Vector<T> vec_add(const Vector<T>& vecA, const Vector<T>& vecB) {
 		// add length check later
 		Vector<T> vec3(vecA.shape.size);
 
@@ -61,7 +61,7 @@ namespace numc {
 	}
 	
 	template <typename T>
-	Vector<T> vecSub(const Vector<T>& vecA, const Vector<T>& vecB) {
+	Vector<T> vec_sub(const Vector<T>& vecA, const Vector<T>& vecB) {
 		Vector<T> c(vecA.shape.size);
 
 		for (size_t i = 0; i < vecA.shape.size; ++i) {

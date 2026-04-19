@@ -11,8 +11,6 @@ namespace numc {
 
 	struct Matrix {
 		std::unique_ptr<T[]> elements;
-		std::size_t capacity;
-		std::size_t size;
 		numc::Shape shape;
 
 		Matrix(std::size_t rows, std::size_t cols) :
@@ -20,39 +18,22 @@ namespace numc {
 				static_cast<uint32_t>(rows), 
 				static_cast<uint32_t>(cols),
 			}),
-			size(0),
-			capacity(rows * cols),
 			elements(std::make_unique<T[]>(rows * cols)) {}
-		
+	
+		Matrix(numc::Shape shape) : shape(shape),
+		elements(std::make_unique<T[]>(shape.rows * shape.cols)) {}
+
 		Matrix(Matrix&& other) noexcept
-			: size(other.size),
-			  capacity(other.capacity),
-			  shape(other.shape),
+			: shape(other.shape),
 			  elements(std::move(other.elements)) {
-			other.size = 0;
-			other.capacity = 0;
 		}
 
 		~Matrix() = default;
 
-		T get(std::uint32_t row_index, std::uint32_t col_index) const {	
-			if (row_index >= shape.rows || col_index >= shape.cols) { throw std::out_of_range("index of of range!"); } 
-			return elements[row_index * shape.cols + col_index];
-		}
-
-		void push(T value) {
-			if (size >= capacity) return;
-			elements[size++] = value;
-		}
-
-		void set(std::size_t index_row, std::size_t index_col, T value) {
-			if (index_row >= shape.rows || index_col >= shape.cols) return;
-			elements[index_row * shape.cols + index_col] = value;
-		}
+		T* operator[](size_t i) { return elements.get() + i * shape.cols; }
+		const T* operator[](size_t i) const { return elements.get() + i * shape.cols; }
 		
 		friend std::ostream& operator<<(std::ostream& os, const Matrix<T>& mat) {
-			if (mat.size == 0) { os << "[[ ]]"; return os; }
-
 			os << "[";
 
 			for (uint32_t i = 0; i < mat.shape.rows; ++i) {
@@ -74,7 +55,7 @@ namespace numc {
 
 	template <typename T>
 	void scalarX(Matrix<T>& mat, int x) {
-		for (size_t i = 0; i < mat.size; ++i) {
+		for (size_t i = 0; i < mat.shape.rows * mat.shape.cols; ++i) {
 			mat.elements[i] *= x;
 		}
 	}
@@ -82,13 +63,12 @@ namespace numc {
 	template <typename T>
 	Matrix<T> matAdd(const Matrix<T>& matA, const Matrix<T>& matB) {
 		// add length & shape check later
-		Matrix<T> matC(matA.size);
+		Matrix<T> matC(matA.shape);
 
-		for (size_t i = 0; i < matA.size; ++i) {
+		for (size_t i = 0; i < matA.shape.rows * matA.shape.cols; ++i) {
 			matC.elements[i] = matA.elements[i] + matB.elements[i];
 		}
 
-		matC.size = matA.size;
 		matC.shape = matA.shape;
 
 		return matC;
@@ -97,9 +77,9 @@ namespace numc {
 	template <typename T>
 	Matrix<T> matSub(const Matrix<T>& matA, const Matrix<T>& matB) {
 		// add length & shape check later
-		Matrix<T> matC(matA.size);
+		Matrix<T> matC(matA.shape);
 
-		for (size_t i = 0; i < matA.size; ++i) {
+		for (size_t i = 0; i < matA.shape.rows * matA.shape.cols; ++i) {
 			matC.elements[i] = matA.elements[i] - matB.elements[i];
 		}
 
@@ -132,21 +112,21 @@ namespace numc {
 	}
 
 	template <typename T>
-	Matrix<T> hadamard(const Matrix<T>& A, const Matrix<T>& B) {
-		if (A.shape != B.shape) 
+	Matrix<T> hadamard(const Matrix<T>& matA, const Matrix<T>& matB) {
+		if (matA.shape != matB.shape) 
 			throw std::invalid_argument("Incompatible Matrix Dimensions");
 		
-		Matrix<T> C(A.shape.rows, B.shape.cols);
+		Matrix<T> matC(matA.shape.rows, matB.shape.cols);
 
-		for (size_t i = 0; i < A.size; ++i) {
-			C.elements[i] = A.elements[i] * B.elements[i];
-			++C.size;
+		for (size_t i = 0; i < matA.size; ++i) {
+			matC.elements[i] = matA.elements[i] * matB.elements[i];
+			++matC.size;
 		}
 
-		return C;
+		return matC;
 	}
   
-	// ADD TILING FOR BIGGER MATRICIES e.g. 8x8
+	// ADD TILING FOR BIGGER MATRImatC.ES e.g. 8x8
 	template <typename T>
 	Matrix<T> transpose(const Matrix<T>& mat) {
 		Matrix<T> t(mat.shape.cols, mat.shape.rows);

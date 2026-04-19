@@ -9,8 +9,7 @@ int main(void) {
 	// auto vec2 = numc::Vector<int>(3);
 	//
 	// for (int i = 0; i < 3; ++i) {
-	// 	vec1.push(i);
-	// 	vec2.push(i + 1);
+	// 	vec1[i] = i + 1;
 	// }
 	//
 	// auto vec3 = numc::hadamard(vec1, vec2);
@@ -36,19 +35,31 @@ int main(void) {
 	
 	// MATRIX TEST STARTS HERE:
 	
-	auto matrixA = numc::Matrix<int>(3, 3);
-	auto matrixB = numc::Matrix<int>(3, 3);
+	numc::Shape square = (numc::Shape) { .rows = 3, .cols = 3 };
 
-	for (int i = 0; i < 9; ++i) {
-		matrixA.push(i + 1);
+	auto matrixA = numc::Matrix<int>(square);
+	auto matrixB = numc::Matrix<int>(square);
+
+	int valA = 1;
+
+	for (int i = 0; i < matrixA.shape.rows; ++i) {
+		for (int j = 0; j < matrixA.shape.cols; ++j) {
+			matrixA[i][j] = valA;
+			++valA;
+		}
 	}
 
-	for (int i = 9; i >= 0; --i) {
-		matrixB.push(i);
+	int valB = 9;
+
+	for (int i = 0; i < matrixB.shape.rows; ++i) {
+		for (int j = 0; j < matrixB.shape.rows; ++j) {
+			matrixB[i][j] = valB;
+			--valB;
+		}
 	}
 
-	// std::cout << matrixA << "\n";
-	// std::cout << matrixB << "\n";
+	std::cout << matrixA << "\n";
+	std::cout << matrixB << "\n";
 	//
 	// numc::Matrix<int> matrixC = numc::matMult(matrixA, matrixB);
 	//
@@ -58,9 +69,9 @@ int main(void) {
 	//
 	// std::cout << matrixD << "\n";
 	
-	auto matrixT = numc::transpose(matrixA);
+	// auto matrixT = numc::transpose(matrixA);
 
-	std::cout << matrixT << "\n";
+	// std::cout << matrixT << "\n";
 
 	return 0;
 }

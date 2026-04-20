@@ -133,14 +133,31 @@ namespace numc {
 		return matT;
 	}
 
-	// template <typename T>
-	// T determinant(Matrix<T>& mat) {
-	// 	T det = 0;
-	//
-	//
-	//
-	//
-	// 	return det;
-	// }
+	template <typename T>
+	T trace(const Matrix<T>& mat) {
+		if (!mat.shape.square)
+			throw std::invalid_argument("Matrix must be square!");
+
+		T trace = 0;
+	
+		for (size_t i = 0; i < mat.shape.rows; ++i) {
+			trace += mat.elements[i * mat.shape.cols + i];
+		}
+		
+		return trace;
+	}
+
+	template <typename T>
+	T det(const Matrix<T>& mat) {
+		if (!mat.shape.square)
+			throw std::invalid_argument("Matrix must be square!");
+
+		T det = 0;
+
+		
+
+
+		return det;
+	}
 
 }
